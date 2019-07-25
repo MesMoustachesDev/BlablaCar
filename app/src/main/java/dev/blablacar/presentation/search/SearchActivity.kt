@@ -3,6 +3,9 @@ package dev.blablacar.presentation.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.nonNullObserveConsume
 import com.google.android.material.snackbar.Snackbar
@@ -12,6 +15,7 @@ import dev.mesmoustaches.android.view.linkVisibilityTo
 import kotlinx.android.synthetic.main.activity_search.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+
 
 class SearchActivity : AppCompatActivity() {
     private val viewModel: SearchActivityViewModel by viewModel()
@@ -43,6 +47,22 @@ class SearchActivity : AppCompatActivity() {
                 )
             )
         }
+        stopCity.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                return if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    startActivity(
+                        RidesActivity.createIntent(
+                            this@SearchActivity,
+                            startCity.text.toString(),
+                            stopCity.text.toString()
+                        )
+                    )
+                    true
+                } else {
+                    false
+                }
+            }
+        })
     }
 
     companion object {
