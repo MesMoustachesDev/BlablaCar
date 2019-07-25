@@ -4,4 +4,6 @@
     <string name="stop_city">Choisissez votre ville d\'arrivée</string>
     <string name="trip_start">De %s</string>
     <string name="trip_stop">à %s</string>
+    <string name="search_activity">Trouvez votre trajet</string>
+    <string name="rides_activity">Vos trajets</string>
 </resources>
