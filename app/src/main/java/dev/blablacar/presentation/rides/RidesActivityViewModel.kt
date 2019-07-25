@@ -1,4 +1,4 @@
-package dev.blablacar.presentation.home
+package dev.blablacar.presentation.rides
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -15,13 +15,12 @@ class RidesActivityViewModel(
 ) : BaseViewModel(context) {
 
     private var localJob: Job? = null
-    private var oldSize = -1
 
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String>()
     val ridesLiveData: LiveData<List<RidesAdapter.Cell>> =
         Transformations.map(rideLiveDataUseCase.data) { result ->
-            if (result.fullLoaded) {
+            if (result.fullLoaded || result.values?.size == 0) {
                 result.values?.map { it.toCell() }
             } else {
                 val arrayList: ArrayList<RidesAdapter.Cell> = ArrayList(result.values?.map { it.toCell() })
@@ -30,18 +29,23 @@ class RidesActivityViewModel(
             }
         }
 
-    init {
-        oldSize = -1
-        refresh()
-    }
-
-    fun refresh(forceUpdate: Boolean = false) {
+    fun refresh(
+        forceUpdate: Boolean = false,
+        startCity: String,
+        stopCity: String
+    ) {
         localJob = launchDataLoad(
             loadingLiveData,
             errorLiveData,
             getError
         ) {
-            rideLiveDataUseCase.execute(GetRidesUseCase.Params(forceUpdate = forceUpdate))
+            rideLiveDataUseCase.execute(
+                GetRidesUseCase.Params(
+                    forceUpdate = forceUpdate,
+                    startCity = startCity,
+                    stopCity = stopCity
+                )
+            )
         }
     }
 
@@ -50,13 +54,22 @@ class RidesActivityViewModel(
         localJob?.cancel()
     }
 
-    fun loadMore() {
+    fun loadMore(
+        startCity: String,
+        stopCity: String
+    ) {
         localJob = launchDataLoad(
             null,
             errorLiveData,
             getError
         ) {
-            rideLiveDataUseCase.execute(GetRidesUseCase.Params(loadMore = true))
+            rideLiveDataUseCase.execute(
+                GetRidesUseCase.Params(
+                    loadMore = true,
+                    startCity = startCity,
+                    stopCity = stopCity
+                )
+            )
         }
     }
 }

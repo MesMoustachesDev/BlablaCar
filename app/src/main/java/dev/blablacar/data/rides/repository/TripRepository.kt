@@ -7,8 +7,12 @@ interface TripRepository {
     /**
      * Fetch user's animals
      */
-    suspend fun fetchEvents(forceUpdate: Boolean = false,
-                            loadMore: Boolean = false)
+    suspend fun fetchEvents(
+        start: String,
+        stop: String,
+        forceUpdate: Boolean = false,
+        loadMore: Boolean = false
+    )
 
     fun getRides(): LiveData<List<Trip>>
     fun isFullLoaded(): LiveData<Boolean>

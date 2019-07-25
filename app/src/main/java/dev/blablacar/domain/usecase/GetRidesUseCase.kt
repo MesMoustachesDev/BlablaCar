@@ -32,7 +32,9 @@ class GetRidesUseCase(
         try {
             rideRepository
                 .fetchEvents(forceUpdate = input?.forceUpdate ?: false,
-                    loadMore = input?.loadMore?: false)
+                    loadMore = input?.loadMore?: false,
+                    start = input?.startCity ?: "",
+                    stop = input?.stopCity ?: "")
         } catch (e: Exception) {
             Timber.e(e, "Error getting employees")
             throw e
@@ -40,6 +42,8 @@ class GetRidesUseCase(
     }
 
     data class Params(
+        val startCity: String,
+        val stopCity: String,
         val forceUpdate: Boolean = false,
         val loadMore: Boolean = false
     )

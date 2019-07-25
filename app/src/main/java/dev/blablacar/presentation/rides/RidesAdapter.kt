@@ -1,4 +1,4 @@
-package dev.blablacar.presentation.home
+package dev.blablacar.presentation.rides
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import dev.blablacar.R
 import dev.blablacar.domain.model.RideDomain
 import dev.mesmoustaches.android.view.GenericViewHolder
-import kotlinx.android.synthetic.main.item_event.view.*
+import kotlinx.android.synthetic.main.item_ride.view.*
 
 class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<GenericViewHolder>() {
 
@@ -27,7 +27,7 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
             false
         )
         return when (viewType) {
-            R.layout.item_event -> RideViewHolder(view)
+            R.layout.item_ride -> RideViewHolder(view)
             else -> NeedMoreViewHolder(view, needMore)
         }
     }
@@ -35,7 +35,7 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
     override fun getItemCount(): Int = items.size
 
     override fun getItemViewType(position: Int): Int = when (items[position]) {
-        is Cell.DataCell -> R.layout.item_event
+        is Cell.DataCell -> R.layout.item_ride
         is Cell.NeedMore -> R.layout.item_need_more
     }
 
@@ -44,6 +44,8 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
             val item = t as Cell.DataCell
             itemView.name.text = item.driverName
             itemView.price.text = item.price
+            itemView.tripStart.text = itemView.resources.getString(R.string.trip_start, item.from)
+            itemView.tripStop.text = itemView.resources.getString(R.string.trip_stop, item.to)
 
             Glide.with(itemView.image)
                 .load(item.image)

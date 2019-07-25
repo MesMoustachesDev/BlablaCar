@@ -25,6 +25,9 @@ class TripRepositoryImpl(
     private val events = localDataSource.queryList(DataSource.Spec.All())
     private val fullLoaded = MutableLiveData<Boolean>()
 
+    private var oldStart: String = ""
+    private var oldStop: String = ""
+
     init {
         fullLoaded.postValue(true)
     }
@@ -33,6 +36,8 @@ class TripRepositoryImpl(
     override fun isFullLoaded(): LiveData<Boolean> = fullLoaded
 
     override suspend fun fetchEvents(
+        start: String,
+        stop: String,
         forceUpdate: Boolean,
         loadMore: Boolean
     ) {
@@ -44,7 +49,12 @@ class TripRepositoryImpl(
         if (loadMore) {
             page++
         }
-        if (!cacheStrategy.isCacheValid(RideCacheStrategy.Params("Paris", "Rennes"))
+        if (oldStart != start || oldStop != stop) {
+            localDataSource.remove(DataSource.Spec.All())
+            oldStart = start
+            oldStop = stop
+        }
+        if (!cacheStrategy.isCacheValid(RideCacheStrategy.Params(start, stop))
             || forceUpdate
             || loadMore
         ) {
@@ -53,8 +63,8 @@ class TripRepositoryImpl(
             withContext(Dispatchers.IO) {
                 try {
                     val result = apiService.getEvents(
-                        from = "Paris",
-                        to = "Rennes",
+                        from = start,
+                        to = stop,
                         page = page
                     )
                     if (!loadMore) {
@@ -63,7 +73,7 @@ class TripRepositoryImpl(
                     result.trips?.let {
                         fullLoaded.postValue(result.fullTripsCount ?: 0 < events.value?.size ?: 0)
                         localDataSource.add(it.filterNotNull())
-                        cacheStrategy.newCacheSet(RideCacheStrategy.Params("Paris", "Rennes"))
+                        cacheStrategy.newCacheSet(RideCacheStrategy.Params(start, stop))
                     }
                 } catch (error: Throwable) {
                     throw error
