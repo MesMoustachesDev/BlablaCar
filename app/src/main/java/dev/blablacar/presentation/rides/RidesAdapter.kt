@@ -60,9 +60,9 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
         }
     }
 
-    fun update(events: List<Cell>) {
-        val diffResult = DiffUtil.calculateDiff(DiffCallback(items, events))
-        items = events
+    fun update(list: List<Cell>) {
+        val diffResult = DiffUtil.calculateDiff(DiffCallback(items, list))
+        items = list
         diffResult.dispatchUpdatesTo(this)
     }
 

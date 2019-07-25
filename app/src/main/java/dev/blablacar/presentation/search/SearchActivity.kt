@@ -3,9 +3,7 @@ package dev.blablacar.presentation.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.nonNullObserveConsume
 import com.google.android.material.snackbar.Snackbar
@@ -47,22 +45,20 @@ class SearchActivity : AppCompatActivity() {
                 )
             )
         }
-        stopCity.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                return if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    startActivity(
-                        RidesActivity.createIntent(
-                            this@SearchActivity,
-                            startCity.text.toString(),
-                            stopCity.text.toString()
-                        )
+        stopCity.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                startActivity(
+                    RidesActivity.createIntent(
+                        this@SearchActivity,
+                        startCity.text.toString(),
+                        stopCity.text.toString()
                     )
-                    true
-                } else {
-                    false
-                }
+                )
+                true
+            } else {
+                false
             }
-        })
+        }
     }
 
     companion object {

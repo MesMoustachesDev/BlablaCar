@@ -4,6 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dev.blablacar.BuildConfig
 import dev.blablacar.data.credentials.repository.CredentialsRepository
+import dev.blablacar.data.user.datasource.TokenService
 import dev.blablacar.data.user.repository.UserRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

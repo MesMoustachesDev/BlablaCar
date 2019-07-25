@@ -1,8 +1,8 @@
 package dev.blablacar.domain.model
 
-import dev.blablacar.data.remote.model.ride.ArrivalPlace
-import dev.blablacar.data.remote.model.ride.DeparturePlace
-import dev.blablacar.data.remote.model.ride.Trip
+import dev.blablacar.data.rides.model.ride.ArrivalPlace
+import dev.blablacar.data.rides.model.ride.DeparturePlace
+import dev.blablacar.data.rides.model.ride.Trip
 
 data class RideDomain (
     val id: String,

@@ -79,13 +79,13 @@ class RidesActivity : AppCompatActivity() {
         fun createIntent(context: Context, startCity: String, stopCity: String): Intent {
             val intent = Intent(context, RidesActivity::class.java)
             intent.putExtra(START_CITY, startCity)
-            intent.putExtra(START_CITY, stopCity)
+            intent.putExtra(STOP_CITY, stopCity)
             return intent
         }
 
         fun extractFromIntent(intent: Intent) = Params(
-            intent.getStringExtra(START_CITY),
-            intent.getStringExtra(STOP_CITY)
+            startCity =  intent.getStringExtra(START_CITY),
+            stopCity = intent.getStringExtra(STOP_CITY)
         )
 
         data class Params(

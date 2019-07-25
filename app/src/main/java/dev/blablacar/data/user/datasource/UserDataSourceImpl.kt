@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import dev.blablacar.data.remote.model.User
+import dev.blablacar.data.user.model.User
 
 class UserDataSourceImpl(context: Context) : UserDataSource {
     private var sharedPref: SharedPreferences = context.getSharedPreferences(

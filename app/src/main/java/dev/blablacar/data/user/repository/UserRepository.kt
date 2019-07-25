@@ -1,6 +1,6 @@
 package dev.blablacar.data.user.repository
 
-import dev.blablacar.data.remote.model.User
+import dev.blablacar.data.user.model.User
 
 interface UserRepository {
     /**

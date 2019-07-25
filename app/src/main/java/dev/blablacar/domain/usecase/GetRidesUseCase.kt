@@ -31,12 +31,12 @@ class GetRidesUseCase(
     override suspend fun createCoroutine(input: Params?) {
         try {
             rideRepository
-                .fetchEvents(forceUpdate = input?.forceUpdate ?: false,
+                .fetchRides(forceUpdate = input?.forceUpdate ?: false,
                     loadMore = input?.loadMore?: false,
                     start = input?.startCity ?: "",
                     stop = input?.stopCity ?: "")
         } catch (e: Exception) {
-            Timber.e(e, "Error getting employees")
+            Timber.e(e, "Error getting rides")
             throw e
         }
     }
