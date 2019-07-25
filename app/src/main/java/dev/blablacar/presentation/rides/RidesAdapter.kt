@@ -11,6 +11,8 @@ import dev.blablacar.R
 import dev.blablacar.domain.model.RideDomain
 import dev.mesmoustaches.android.view.GenericViewHolder
 import kotlinx.android.synthetic.main.item_ride.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<GenericViewHolder>() {
 
@@ -46,6 +48,8 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
             itemView.price.text = item.price
             itemView.tripStart.text = itemView.resources.getString(R.string.trip_start, item.from)
             itemView.tripStop.text = itemView.resources.getString(R.string.trip_stop, item.to)
+            itemView.date.text = item.date
+            itemView.time.text = item.time
 
             Glide.with(itemView.image)
                 .load(item.image)
@@ -96,20 +100,28 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
             val driverName: String,
             val price: String,
             val priceColor: Int,
-            val image: String?
+            val image: String?,
+            val date: String,
+            val time: String
         ) : Cell(id)
 
         object NeedMore : Cell("-1")
     }
 }
 
-fun RideDomain.toCell() = RidesAdapter.Cell.DataCell (
-    id = id,
-    from = from,
-    to = to,
-    driverName = driverName,
-    image = image,
-    priceColor = Color.parseColor(priceColor),
-    price = "$price $currency"
-
-)
+fun RideDomain.toCell(): RidesAdapter.Cell.DataCell {
+    val dateFormat = SimpleDateFormat("dd MMMM")
+    val timeFormat = SimpleDateFormat("HH'h'mm")
+    return RidesAdapter.Cell.DataCell(
+        id = id,
+        from = from,
+        to = to,
+        driverName = driverName,
+        image = image,
+        priceColor = Color.parseColor(priceColor),
+        price = String.format(
+            Locale.getDefault(), "%.02f%s", price, currency),
+        date = dateFormat.format(date),
+        time = timeFormat.format(date)
+    )
+}
