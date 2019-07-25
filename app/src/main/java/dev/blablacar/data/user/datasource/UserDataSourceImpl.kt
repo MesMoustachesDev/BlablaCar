@@ -9,18 +9,23 @@ import dev.blablacar.data.user.model.User
 
 class UserDataSourceImpl(context: Context) : UserDataSource {
     private var sharedPref: SharedPreferences = context.getSharedPreferences(
-        "UserDataSourceImpl", Context.MODE_PRIVATE
+        USER_DATA_SOURCE, Context.MODE_PRIVATE
     )
 
     override fun getUser(): User? = try {
-        Gson().fromJson(sharedPref.getString("User", "") ?: "", User::class.java)
+        Gson().fromJson(sharedPref.getString(USER_KEY, "") ?: "", User::class.java)
     } catch (jonSyntaxException: JsonSyntaxException) {
         null
     }
 
     override fun setUser(user: User?) {
         sharedPref.edit(true) {
-            putString("User", Gson().toJson(user))
+            putString(USER_KEY, Gson().toJson(user))
         }
+    }
+
+    companion object {
+        private const val USER_DATA_SOURCE = "UserDataSource"
+        private const val USER_KEY = "User"
     }
 }

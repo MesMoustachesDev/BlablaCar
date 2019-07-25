@@ -9,7 +9,7 @@ class RideCacheStrategy: CacheStrategy<RideCacheStrategy.Params> {
     private var stop: String = ""
 
     override fun isCacheValid(t: Params): Boolean {
-        val isValid = ((Date().time - time) < 1 * 60 * 1000 && t.start == start && t.stop == stop)
+        val isValid = ((Date().time - time) < 5 * 60 * 1000 && t.start == start && t.stop == stop)
         if (!isValid) {
             start = ""
             stop = ""
