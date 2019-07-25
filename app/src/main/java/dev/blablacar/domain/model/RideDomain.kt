@@ -29,6 +29,6 @@ fun Trip.toDomain(): RideDomain {
     )
 }
 
-fun ArrivalPlace.toAddress(): String = "$$address\n$cityName\n$countryCode"
+fun ArrivalPlace.toAddress(): String = "$address"
 
-fun DeparturePlace.toAddress(): String = "$address\n$cityName\n$countryCode"
+fun DeparturePlace.toAddress(): String = "$address"
