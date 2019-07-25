@@ -51,6 +51,7 @@ class TripRepositoryImpl(
         }
         if (oldStart != start || oldStop != stop) {
             localDataSource.remove(DataSource.Spec.All())
+            page = 1
             oldStart = start
             oldStop = stop
         }
@@ -71,7 +72,7 @@ class TripRepositoryImpl(
                         localDataSource.remove(DataSource.Spec.All())
                     }
                     result.trips?.let {
-                        fullLoaded.postValue(result.fullTripsCount ?: 0 < events.value?.size ?: 0)
+                        fullLoaded.postValue(result.pager?.page ?: 0 >= result.pager?.pages ?: 0)
                         localDataSource.add(it.filterNotNull())
                         cacheStrategy.newCacheSet(RideCacheStrategy.Params(start, stop))
                     }
