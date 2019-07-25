@@ -1,6 +1,5 @@
 package dev.blablacar.presentation.rides
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,7 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
 
     override fun getItemViewType(position: Int): Int = when (items[position]) {
         is Cell.DataCell -> R.layout.item_ride
-        is Cell.NeedMore -> R.layout.item_need_more
+        is Cell.NeedMore -> R.layout.item_ride_loading
     }
 
     inner class RideViewHolder(itemView: View) : GenericViewHolder(itemView) {
@@ -99,7 +98,6 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
             val to: String,
             val driverName: String,
             val price: String,
-            val priceColor: Int,
             val image: String?,
             val date: String,
             val time: String
@@ -118,7 +116,6 @@ fun RideDomain.toCell(): RidesAdapter.Cell.DataCell {
         to = to,
         driverName = driverName,
         image = image,
-        priceColor = Color.parseColor(priceColor),
         price = String.format(
             Locale.getDefault(), "%.02f%s", price, currency),
         date = dateFormat.format(date),
