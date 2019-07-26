@@ -51,7 +51,7 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
 
             Glide.with(itemView.image)
                 .load(item.image)
-                .placeholder(R.drawable.logo)
+                .placeholder(R.drawable.ic_placeholder)
                 .into(itemView.image)
         }
     }
