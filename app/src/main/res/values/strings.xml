@@ -2,8 +2,9 @@
     <string name="app_name">BlablaCar Test</string>
     <string name="start_city">Choissez votre ville de départ</string>
     <string name="stop_city">Choisissez votre ville d\'arrivée</string>
-    <string name="trip_start">De : %s</string>
-    <string name="trip_stop">À : %s</string>
+    <string name="trip_start">%s : %s (%s km)</string>
+    <string name="trip_stop">%s : %s (%s km)</string>
     <string name="search_activity">Trouvez votre trajet</string>
     <string name="rides_activity">Vos trajets</string>
+    <string name="driver_name_and_age">%s\n%d ans</string>
 </resources>

@@ -10,7 +10,9 @@ import dev.blablacar.R
 import dev.blablacar.domain.model.RideDomain
 import dev.mesmoustaches.android.view.GenericViewHolder
 import kotlinx.android.synthetic.main.item_ride.view.*
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+
 
 class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<GenericViewHolder>() {
 
@@ -42,12 +44,14 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
     inner class RideViewHolder(itemView: View) : GenericViewHolder(itemView) {
         override fun <T> bind(t: T) {
             val item = t as Cell.DataCell
-            itemView.name.text = item.driverName
+            itemView.name.text = item.age?.let {
+                itemView.resources.getString(R.string.driver_name_and_age, item.driverName, it)
+            } ?: item.driverName
             itemView.price.text = item.price
-            itemView.tripStart.text = itemView.resources.getString(R.string.trip_start, item.from)
-            itemView.tripStop.text = itemView.resources.getString(R.string.trip_stop, item.to)
-            itemView.date.text = item.date
-            itemView.time.text = item.time
+            itemView.tripStart.text = itemView.resources.getString(R.string.trip_start, item.startTime, item.from, item.startDistance)
+            itemView.tripStop.text = itemView.resources.getString(R.string.trip_stop, item.arrivalTime, item.to, item.arrivalDistance)
+            itemView.date.text = item.startDate
+            itemView.time.text = item.startTime
 
             Glide.with(itemView.image)
                 .load(item.image)
@@ -96,10 +100,14 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
             val from: String,
             val to: String,
             val driverName: String,
+            val age: Int?,
             val price: String,
             val image: String?,
-            val date: String,
-            val time: String
+            val startDate: String,
+            val startTime: String,
+            val arrivalTime: String,
+            val startDistance: String,
+            val arrivalDistance: String
         ) : Cell(id)
 
         object NeedMore : Cell("-1")
@@ -109,14 +117,19 @@ class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<G
 fun RideDomain.toCell(): RidesAdapter.Cell.DataCell {
     val dateFormat = SimpleDateFormat("dd MMMM")
     val timeFormat = SimpleDateFormat("HH'h'mm")
+    val decimalFormat = DecimalFormat("##.##")
     return RidesAdapter.Cell.DataCell(
         id = id,
         from = from,
         to = to,
         driverName = driverName,
+        age = age,
         image = image,
         price = priceStringValue,
-        date = dateFormat.format(date),
-        time = timeFormat.format(date)
+        startDate = dateFormat.format(startDate),
+        startTime = timeFormat.format(startDate),
+        arrivalTime = timeFormat.format(arrivalTime),
+        startDistance = decimalFormat.format(startDistance / 1000f),
+        arrivalDistance = decimalFormat.format(arrivalDistance / 1000f)
     )
 }
