@@ -13,6 +13,7 @@ data class RideDomain (
     val driverName: String,
     val price: Float,
     val currency: String,
+    val priceStringValue: String,
     val priceColor: String,
     val image: String?,
     val date: Date
@@ -26,6 +27,7 @@ fun Trip.toDomain(): RideDomain {
         driverName = user?.displayName ?: "",
         price = price?.value ?: -1f,
         currency = price?.currency?.toCurrency() ?: "€",
+        priceStringValue = priceWithCommission?.stringValue ?: "",
         priceColor = price?.priceColor ?: "",
         image = user?.picture ?: "",
         date = sdf.parse(departureDate)

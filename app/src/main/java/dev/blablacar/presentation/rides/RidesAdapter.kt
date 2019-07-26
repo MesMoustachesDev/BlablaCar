@@ -11,7 +11,6 @@ import dev.blablacar.domain.model.RideDomain
 import dev.mesmoustaches.android.view.GenericViewHolder
 import kotlinx.android.synthetic.main.item_ride.view.*
 import java.text.SimpleDateFormat
-import java.util.*
 
 class RidesAdapter(private val needMore: (Int) -> Unit) : RecyclerView.Adapter<GenericViewHolder>() {
 
@@ -116,8 +115,7 @@ fun RideDomain.toCell(): RidesAdapter.Cell.DataCell {
         to = to,
         driverName = driverName,
         image = image,
-        price = String.format(
-            Locale.getDefault(), "%.02f%s", price, currency),
+        price = priceStringValue,
         date = dateFormat.format(date),
         time = timeFormat.format(date)
     )
