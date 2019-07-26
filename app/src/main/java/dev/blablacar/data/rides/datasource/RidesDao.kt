@@ -5,25 +5,25 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import dev.blablacar.data.remote.model.ride.Trip
+import dev.blablacar.data.rides.model.ride.Trip
 
 @Dao
 interface RidesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addEvent(ride: Trip)
+    fun addRide(ride: Trip)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addEventList(rides: List<Trip>)
+    fun addRideList(rides: List<Trip>)
 
     @Query("DELETE FROM rides WHERE permanent_id=:ref")
-    fun removeEvent(ref: String)
+    fun removeRide(ref: String)
 
     @Query("DELETE FROM rides")
-    fun clearEventList()
+    fun clearRideList()
 
     @Query("SELECT * from rides")
-    fun getEvents(): LiveData<List<Trip>>
+    fun getRides(): LiveData<List<Trip>>
 
     @Query("SELECT * from rides WHERE permanent_id = :ref")
-    fun getEventsWithRef(ref: String): LiveData<Trip>
+    fun getRidesWithRef(ref: String): LiveData<Trip>
 }

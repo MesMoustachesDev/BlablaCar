@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dev.blablacar.data.common.CacheStrategy
 import dev.blablacar.data.common.DataSource
-import dev.blablacar.data.remote.ApiService
-import dev.blablacar.data.remote.model.ride.Trip
+import dev.blablacar.data.rides.datasource.ApiService
+import dev.blablacar.data.rides.model.ride.Trip
 import dev.blablacar.data.rides.datasource.RideDataSource
 import dev.blablacar.data.rides.repository.cache.RideCacheStrategy
 import kotlinx.coroutines.Dispatchers
@@ -19,51 +19,49 @@ class TripRepositoryImpl(
 ) : TripRepository {
 
     private var page: Int = 1
+
     @Volatile
     private var fetchRunning = false
 
-    private val events = localDataSource.queryList(DataSource.Spec.All())
+    private val rides = localDataSource.queryList(DataSource.Spec.All())
     private val fullLoaded = MutableLiveData<Boolean>()
 
     init {
         fullLoaded.postValue(true)
     }
 
-    override fun getRides(): LiveData<List<Trip>> = events
+    override fun getRides(): LiveData<List<Trip>> = rides
     override fun isFullLoaded(): LiveData<Boolean> = fullLoaded
 
-    override suspend fun fetchEvents(
+    override suspend fun fetchRides(
+        start: String,
+        stop: String,
         forceUpdate: Boolean,
         loadMore: Boolean
     ) {
         if (fetchRunning) return
-        if (forceUpdate) {
-            fullLoaded.postValue(false)
-            page = 1
-        }
+        val isCacheValid = cacheStrategy.isCacheValid(RideCacheStrategy.Params(start, stop))
         if (loadMore) {
             page++
         }
-        if (!cacheStrategy.isCacheValid(RideCacheStrategy.Params("Paris", "Rennes"))
-            || forceUpdate
-            || loadMore
-        ) {
+        if (!isCacheValid || forceUpdate) {
+            localDataSource.remove(DataSource.Spec.All())
+            page = 1
+        }
+        if (!isCacheValid || forceUpdate || loadMore) {
             Timber.d("Loading from api")
             fetchRunning = true
             withContext(Dispatchers.IO) {
                 try {
-                    val result = apiService.getEvents(
-                        from = "Paris",
-                        to = "Rennes",
+                    val result = apiService.getRides(
+                        from = start,
+                        to = stop,
                         page = page
                     )
-                    if (!loadMore) {
-                        localDataSource.remove(DataSource.Spec.All())
-                    }
                     result.trips?.let {
-                        fullLoaded.postValue(result.fullTripsCount ?: 0 < events.value?.size ?: 0)
+                        fullLoaded.postValue(result.pager?.page ?: 0 >= result.pager?.pages ?: 0)
                         localDataSource.add(it.filterNotNull())
-                        cacheStrategy.newCacheSet(RideCacheStrategy.Params("Paris", "Rennes"))
+                        cacheStrategy.newCacheSet(RideCacheStrategy.Params(start, stop))
                     }
                 } catch (error: Throwable) {
                     throw error

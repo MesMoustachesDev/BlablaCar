@@ -1,7 +1,6 @@
 package dev.blablacar.data.user.repository
 
-import androidx.lifecycle.LiveData
-import dev.blablacar.data.remote.model.User
+import dev.blablacar.data.user.model.User
 import dev.blablacar.data.user.datasource.UserDataSource
 
 class UserRepositoryImpl(
