@@ -8,7 +8,6 @@ import androidx.lifecycle.nonNullObserve
 import androidx.lifecycle.nonNullObserveConsume
 import com.google.android.material.snackbar.Snackbar
 import dev.blablacar.R
-import dev.blablacar.presentation.search.SearchActivity
 import dev.mesmoustaches.android.view.linkVisibilityTo
 import kotlinx.android.synthetic.main.activity_rides.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,7 +67,7 @@ class RidesActivity : AppCompatActivity() {
         }
 
         fab?.setOnClickListener {
-            startActivity(SearchActivity.createIntent(this))
+            finish()
         }
     }
 
