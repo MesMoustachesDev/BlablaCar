@@ -39,6 +39,6 @@ fun String.toCurrency() = when(this) {
     else -> "£"
 }
 
-fun ArrivalPlace.toAddress(): String = "$address"
+fun ArrivalPlace.toAddress(): String = "$cityName"
 
-fun DeparturePlace.toAddress(): String = "$address"
+fun DeparturePlace.toAddress(): String = "$cityName"
